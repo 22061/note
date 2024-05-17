@@ -22,7 +22,7 @@ namespace zk_api {
     analogWrite(6,value);
   }
   inline void rear_right_pwm(int value){
-    analogWrite(9,value);
+    analogWrite(10,value);
   }
 
   inline void front_right_cw_ccw(int status){

@@ -35,7 +35,7 @@ namespace zk_api {
     digitalWrite(7,status);
   }
   inline void rear_right_cw_ccw(int status){
-    digitalWrite(8,status);
+    digitalWrite(12,status);
   }
 
   inline void control_front_right(int power){

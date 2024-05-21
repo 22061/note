@@ -1,5 +1,5 @@
-#include <ArduinoJson.h>
 #include<SoftwareSerial.h>
+#include <ArduinoJson.h>
 
 #ifndef ZIKOICHI_KUN_API_HPP_
 #define ZIKOICHI_KUN_API_HPP_
@@ -115,14 +115,14 @@ namespace zk_api {
   }
 }
 
-StaticJsonDocument<200> doc;
 SoftwareSerial IM920Serial(8, 9);  //RX, TX
+StaticJsonDocument<200> doc;
 
-char data[50];
+char input[50];
+String data;
 int i = 0;  
-String value;
-float x1 = 0;
-float y1 = 0;
+float x = 0;
+float y = 0;
 
 void setup() {
   Serial.begin(19200);
@@ -135,10 +135,10 @@ void loop()
   if (IM920Serial.available()) 
   {
     data[i] = IM920Serial.read();
-    if (data[i] == '\n') 
+    if (input[i] == '\n') 
     {
-      data[i] = '\n';
-      //Serial.print(data);
+      input[i] = '\n';
+      //Serial.print(input);
       i = 0;
     }
     else
@@ -146,17 +146,17 @@ void loop()
         i++;
     }
 
-    value = data;
-    value = value.substring(11);
+    data = input;
+    data = data.substring(11);
 
-    DeserializationError error = deserializeJson(doc, value);
+    DeserializationError error = deserializeJson(doc, data);
 
-    x1=doc["x_axis"];
-    y1=doc["y_axis"];
+    x = doc["x_axis"];
+    y = doc["y_axis"];
     // Serial.print(x1);
     // Serial.print(",");
     // Serial.println(y1);
-    zk_api::xyz_control(x1, y1, 0.0, 50);
+    zk_api::xyz_control(x, y, 0.0, 50);
   }
 }
 #endif

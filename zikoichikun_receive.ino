@@ -153,9 +153,9 @@ void loop()
 
     x = doc["x_axis"];
     y = doc["y_axis"];
-    // Serial.print(x1);
+    // Serial.print(x);
     // Serial.print(",");
-    // Serial.println(y1);
+    // Serial.println(y);
     zk_api::xyz_control(x, y, 0.0, 50);
   }
 }

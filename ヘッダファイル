@@ -5,27 +5,27 @@
 
 SoftwareSerial IM920Serial(8, 9);    // RX, TX
 
-char send_data[255];
-char receive_data[255];
-int i;
-
 namespace IM920
 {
   inline void setup(void) 
   {
     IM920Serial.begin(19200);
+    Serial.begin(19200);
   }
 
-  inline void send(char number, char send_data) 
-  { 
+  inline void send(char number, char send_data)
+  {
     IM920Serial.print("TXDU");
     IM920Serial.print(number);
     IM920Serial.print(",");
     IM920Serial.println(send_data);
   }
 
-  inline char receive(void)
+  inline void receive(void)
   {
+    char receive_data[256];
+    int i = 0;
+
     if(IM920Serial.available()) 
     {
       receive_data[i] = IM920Serial.read();
@@ -40,8 +40,6 @@ namespace IM920
         i++;
       }
     }
-
-    return receive_data;
   }
 }
 #endif

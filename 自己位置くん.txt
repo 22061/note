@@ -1,9 +1,0 @@
-#include "zikoichi_kun_api.hpp"
-
-void setup() {
-  zk_api::setup();
-}
-
-void loop() {
-  zk_api::xyz_control(1.0, 0.0, 0.0, 10);
-}

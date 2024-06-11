@@ -1,0 +1,52 @@
+#ifndef IM920_HPP_
+#define IM920_HPP_
+
+#include <SoftwareSerial.h>
+
+SoftwareSerial IM920Serial(8, 9);    // RX, TX
+
+char input[256];
+String receive_data;
+int i = 0;
+
+namespace IM920
+{
+  inline void setup(void) 
+  {
+    IM920Serial.begin(19200);
+    Serial.begin(19200);
+  }
+
+  inline void send(String number, String send_data) 
+  {
+    IM920Serial.print("TXDU");
+    IM920Serial.print(number);
+    IM920Serial.print(",");
+    IM920Serial.println(send_data);
+  }
+
+  inline String receive(void)
+  {
+    if(IM920Serial.available()) 
+    {
+      input[i] = IM920Serial.read();
+      if (input[i] == '\n') 
+      {
+        input[i] = '\n';
+        // Serial.print(input);
+        // receive_data = Serial.read();
+        // return receive_data;
+
+        // receive_data = input;
+        // return receive_data;
+
+        i = 0;
+      }
+      else
+      {
+        i++;
+      }
+    }
+  }
+}
+#endif

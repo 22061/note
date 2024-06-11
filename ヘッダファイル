@@ -13,7 +13,7 @@ namespace IM920
     Serial.begin(19200);
   }
 
-  inline void send(String number, String send_data)
+  inline void send(String number, String send_data) 
   {
     IM920Serial.print("TXDU");
     IM920Serial.print(number);

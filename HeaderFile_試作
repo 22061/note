@@ -2,12 +2,13 @@
 #define IM920_HPP_
 
 #include <SoftwareSerial.h>
+#include <ArduinoJson.h>
 
 SoftwareSerial IM920Serial(8, 9);    // RX, TX
+StaticJsonDocument<200> doc;
 
 char input[256];
 String receive_data;
-long value;
 int i = 0;
 
 namespace IM920
@@ -26,7 +27,7 @@ namespace IM920
     IM920Serial.println(send_data);
   }
 
-  inline long receive(void)
+  inline void receive(void)
   {
     if(IM920Serial.available()) 
     {
@@ -35,9 +36,12 @@ namespace IM920
       {
         receive_data = input;
         receive_data = receive_data.substring(11);
-        value = receive_data.toInt();
-        
-        return value;
+
+        DeserializationError error = deserializeJson(doc, receive_data);
+
+        Serial.print(receive_data);
+
+        //return receive_data;
 
         i = 0;
       }

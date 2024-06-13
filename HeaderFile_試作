@@ -7,6 +7,7 @@ SoftwareSerial IM920Serial(8, 9);    // RX, TX
 
 char input[256];
 String receive_data;
+long value;
 int i = 0;
 
 namespace IM920
@@ -25,7 +26,7 @@ namespace IM920
     IM920Serial.println(send_data);
   }
 
-  inline String receive(void)
+  inline long receive(void)
   {
     if(IM920Serial.available()) 
     {
@@ -33,12 +34,12 @@ namespace IM920
       if (input[i] == '\n') 
       {
         input[i] = '\n';
-        // Serial.print(input);
-        // receive_data = Serial.read();
-        // return receive_data;
 
-        // receive_data = input;
-        // return receive_data;
+        receive_data = input;
+        receive_data = receive_data.substring(11);
+        value = receive_data.toInt();
+        
+        return value;
 
         i = 0;
       }

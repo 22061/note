@@ -33,8 +33,6 @@ namespace IM920
       input[i] = IM920Serial.read();
       if (input[i] == '\n') 
       {
-        input[i] = '\n';
-
         receive_data = input;
         receive_data = receive_data.substring(11);
         value = receive_data.toInt();

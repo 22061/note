@@ -1,7 +1,6 @@
 #include"IM920.hpp"
 
 String data;
-char value[50];
 
 void setup()
 {
@@ -12,6 +11,5 @@ void setup()
 void loop()
 {
   data = IM920::receive();
-  data.toCharArray(value, data.length() + 1);
   Serial.print(value);
 }

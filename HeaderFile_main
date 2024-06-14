@@ -11,5 +11,5 @@ void setup()
 void loop()
 {
   data = IM920::receive();
-  Serial.print(value);
+  Serial.print(data);
 }

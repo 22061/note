@@ -6,6 +6,7 @@ char value[50];
 void setup()
 {
   IM920::setup();
+  Serial.begin(19200);
 }
 
 void loop()

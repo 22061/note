@@ -2,8 +2,15 @@
 #define IM920_HPP_
 
 #include <SoftwareSerial.h>
+#include <ArduinoJson.h>
 
 SoftwareSerial IM920Serial(8, 9);    // RX, TX
+StaticJsonDocument<200> doc;
+
+char input[50];
+char send_data[50];
+String receive_data;
+int i = 0;
 
 namespace IM920
 {
@@ -13,27 +20,33 @@ namespace IM920
     Serial.begin(19200);
   }
 
-  inline void send(String number, String send_data) 
+  inline void send(String number, int send_1, int send_2) 
   {
+    doc["data1"] = send_1;
+    doc["data2"] = send_2;
+    serializeJson(doc, send_data, 50);
+
     IM920Serial.print("TXDU");
     IM920Serial.print(number);
     IM920Serial.print(",");
-    IM920Serial.println(send_data);
+    IM920Serial.print(send_data);
   }
 
-  inline void receive(void)
+  inline String receive(void)
   {
-    char receive_data[256];
-    int i = 0;
-
     if(IM920Serial.available()) 
     {
-      receive_data[i] = IM920Serial.read();
-      if (receive_data[i] == '\n') 
+      input[i] = IM920Serial.read();
+      if (input[i] == '\n') 
       {
-        receive_data[i] = '\n';
-        Serial.print(receive_data);
+        receive_data = input;
+        receive_data = receive_data.substring(11);
+
+        DeserializationError error = deserializeJson(doc, receive_data);
+
         i = 0;
+
+        return receive_data;
       }
       else
       {

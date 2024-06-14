@@ -7,8 +7,8 @@
 SoftwareSerial IM920Serial(8, 9);    // RX, TX
 StaticJsonDocument<200> doc;
 
-char input[50];
 char send_data[50];
+char input[50];
 String receive_data;
 int i = 0;
 
@@ -17,7 +17,6 @@ namespace IM920
   inline void setup(void) 
   {
     IM920Serial.begin(19200);
-    Serial.begin(19200);
   }
 
   inline void send(String number, int send_1, int send_2) 

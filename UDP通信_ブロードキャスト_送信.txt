@@ -8,6 +8,9 @@ String wifi_pass = "mcu64205";
 uint8_t local_port = 64205;
 
 uint8_t remote_port = 64203;
+IPAddress wifi_ip(192, 168, 128, 190);
+IPAddress wifi_gateway(192, 168, 128, 190);
+IPAddress subnet(255, 255, 255, 0);
 IPAddress broadcast(255, 255, 255, 255);
 WiFiUDP udp;
 
@@ -24,13 +27,18 @@ void BroadcastTimer()
 void setup() {
   Serial.begin(115200);
 
-  WiFi.mode(WIFI_STA);
+  WiFi.mode(WIFI_AP_STA);
+  WiFi.softAP(wifi_name, wifi_pass);
+  delay(100);
+  WiFi.softAPConfig(wifi_ip, wifi_gateway, subnet);
+  
+  delay(100);
+  
   WiFi.begin(wifi_name, wifi_pass);
-  if(WiFi.status() != WL_CONNECTED)
+  while(WiFi.status() != WL_CONNECTED)
   {
     Serial.println("[WiFi_ERROR]Failed to connect to WiFi.");
   }
-
   Serial.println("[WiFi_INFO]Start Wifi on AccesPointMode");
 
   int err = udp.begin(local_port);
@@ -42,26 +50,26 @@ void setup() {
 
   timer = timerBegin(1000000);
   timerAttachInterrupt(timer, &BroadcastTimer);
-  timerAlarm(timer, 1000000, true, 0);
+  timerAlarm(timer, 100000, true, 0);
 }
 
 void loop() {
-  if(timer_flag)
-  {
-    String send_msg = WiFi.softAPIP().toString() + "," + device_name;
-    Serial.println(broadcast);
-    int err = udp.beginPacket(broadcast, remote_port);
-    if(err != 1)
-    {
-      Serial.println("Failed to send begin packet");
-    }
-    udp.print(send_msg.c_str());
-    err = udp.endPacket();
-    if(err != 1)
-    {
-      Serial.println("Failed to send end packet");
-    }
+  // if(timer_flag)
+  // {
+  //   String send_msg = WiFi.softAPIP().toString() + "," + device_name;
+  //   Serial.println(broadcast);
+  //   int err = udp.beginPacket(broadcast, remote_port);
+  //   if(err != 1)
+  //   {
+  //     Serial.println("Failed to send begin packet");
+  //   }
+  //   udp.print(send_msg.c_str());
+  //   err = udp.endPacket();
+  //   if(err != 1)
+  //   {
+  //     Serial.println("Failed to send end packet");
+  //   }
 
-    timer_flag = false;
-  }
+  //   timer_flag = false;
+  // }
 }

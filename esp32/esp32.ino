@@ -30,7 +30,7 @@ void setup()
 void loop() 
 {
   packetSize = udp.parsePacket();
-  if (true) 
+  if (packetSize) 
   {
     for (i = 0 ; i < 256 ; i++) 
     {

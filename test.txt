@@ -1,0 +1,100 @@
+char buf[256];
+int i = 0;
+bool status = false;
+float pre_m1 = 0;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(2, OUTPUT);
+  pinMode(4, OUTPUT);
+}
+
+void loop() {
+  if(Serial.available())
+  {
+    buf[i] = Serial.read();
+    if(buf[i] == 'e')
+    {
+      String read(buf);
+
+      int si = read.indexOf('s');
+      int ei = read.indexOf('e');
+      String data = read.substring(si+1, ei);
+
+      int first_com = data.indexOf(',');
+      String x_str = data.substring(0, first_com);
+      String non_first = data.substring(first_com+1);
+
+      int second_com = non_first.indexOf(',');
+      String y_str = non_first.substring(0, second_com);
+      String non_second = non_first.substring(second_com+1);
+
+      int third_com = non_second.indexOf(',');
+      String ro_str = non_second.substring(0, third_com);
+      String non_third = non_second.substring(third_com+1);
+
+      int fourth_com = non_third.indexOf(',');
+      String m1_str = non_third.substring(0, fourth_com);
+      String non_fourth = non_third.substring(fourth_com+1);
+
+      int fifth_com = non_fourth.indexOf(',');
+      String m2_str = non_fourth.substring(0, fifth_com);
+
+      int x_hold = x_str.toInt();
+      int y_hold = y_str.toInt();
+      int ro_hold = ro_str.toInt();
+      int m1_hold = m1_str.toInt();
+      int m2_hold = m2_str.toInt();
+
+      int m1 = m1_hold - 10;
+
+      if(m1 > 0)
+      {
+        status = true;
+      }
+      else if(m1 < 0)
+      {
+        status = false;
+      }
+
+      if(status == true)
+      {      
+        pre_m1 = pre_m1 + 2.55;
+        if(pre_m1 > 255)
+        {
+          pre_m1 = 255;
+        }
+
+        analogWrite(3, (int)pre_m1);
+        digitalWrite(2, LOW);
+
+        analogWrite(5, (int)pre_m1);
+        digitalWrite(4, HIGH);
+      }
+      else if(status == false)
+      { 
+        pre_m1 = pre_m1 - 2.55;
+        if(pre_m1 < 0)
+        {
+          pre_m1 = 0;
+        }
+        
+        analogWrite(3, (int)pre_m1);
+        digitalWrite(2, LOW);
+
+        analogWrite(5, (int)pre_m1);
+        digitalWrite(4, HIGH);
+      }
+
+      for(int j = 0; j <= i; j++)
+      {
+         buf[j] = 0;
+      }
+      i = 0;
+    }
+    else
+    {
+      i++;
+    }
+  }
+}

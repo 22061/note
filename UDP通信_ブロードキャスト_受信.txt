@@ -15,7 +15,8 @@ char buf[512];
 int packetSize;
 int i = 0;
 
-void setup() {
+void setup() 
+{
   Serial.begin(115200);
 
   WiFi.softAPConfig(wifi_ip, wifi_gateway, subnet);
@@ -29,7 +30,8 @@ void setup() {
   udp.begin(local_port);
 }
 
-void loop() {
+void loop() 
+{
   packetSize = udp.parsePacket();
   if (packetSize) 
   {
